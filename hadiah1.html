@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HADIAH UATAM - Roda Keberuntungan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-image: url('nama-gambar-kamu.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Judul */
+        .title {
+            position: absolute;
+            top: 30px;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px #000;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 30px;
+            border-radius: 50px;
+            z-index: 50;
+        }
+
+        /* Style Roda */
+        .wheel-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            width: 380px;
+            height: 380px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #FFD700;
+            position: relative;
+            overflow: hidden;
+            transition: transform 5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            /* Warna sesuai gambar: Hijau, Biru, Ungu */
+            background: conic-gradient(
+                #4CAF50 0deg 120deg,    /* Hijau - Umroh */
+                #2196F3 120deg 240deg,   /* Biru - Mobil */
+                #9C27B0 240deg 360deg    /* Ungu - iPhone */
+            );
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(2160deg); }
+        }
+
+        /* Bagian Roda & Tulisan Hadiah */
+        .section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px #000;
+            text-align: center;
+        }
+
+        .section:nth-child(1) { transform: rotate(0deg) skewX(-60deg); }
+        .section:nth-child(2) { transform: rotate(120deg) skewX(-60deg); }
+        .section:nth-child(3) { transform: rotate(240deg) skewX(-60deg); }
+
+        .section span { 
+            transform: skewX(60deg) rotate(30deg); 
+            display: block;
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #FFD700;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            border: 3px solid #333;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #FF3333;
+            z-index: 20;
+            filter: drop-shadow(0 0 10px yellow);
+        }
+
+        /* Tombol Play & Tombol Lain */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 30;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+
+        .btn-play {
+            background-color: #FFD700;
+            color: #333;
+            font-size: 24px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-play:hover {
+            background-color: #FFC107;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title">Hadiah uatam</div>
+
+    <!-- Roda Putar -->
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+            <div class="section"><span>🕋 10x Paket Umroh</span></div>
+            <div class="section"><span>🚗 1x Innova Zenix V</span></div>
+            <div class="section"><span>📱 10x iPhone 17</span></div>
+        </div>
+        <div class="center-circle"></div>
+    </div>
+
+    <!-- Tombol -->
+    <div class="button-container">
+        <button class="btn btn-play" id="playBtn">🔴 PUTAR RODA</button>
+    </div>
+
+    <script>
+        const wheel = document.getElementById('wheel');
+        const playBtn = document.getElementById('playBtn');
+        let isSpinning = false;
+
+        // Daftar hadiah sesuai gambar
+        const utama = [
+            "🚗 WOW! Kamu beruntung dapat 1x MobilV!",
+        ];
+
+        playBtn.addEventListener('click', () => {
+            if (isSpinning) return;
+            isSpinning = true;
+            
+            // Putar roda
+            const randomDeg = 2160 + Math.floor(Math.random() * 360);
+            wheel.style.transition = 'transform 5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            wheel.style.transform = `rotate(${randomDeg}deg)`;
+
+            // Setelah selesai putar
+            setTimeout(() => {
+                isSpinning = false;
+                // Pilih hadiah secara acak
+                const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+                alert(randomPrize + "\n\n🎉 Selamat kamu memang hadiah utama hubingi 0813-7823-925");
+            }, 5000);
+        });
+    </script>
+
+</body>
+</html>
+
